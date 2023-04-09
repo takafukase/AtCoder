@@ -1,1 +1,2 @@
-print("hello")
+N = int(input())
+print(N*N)
