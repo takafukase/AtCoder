@@ -16,6 +16,14 @@ if __name__ == "__main__":
                     dp[i+1][j+A[i]] = True
 
     if dp[N][S]:
-        print("Yes")
+        ans = []
+        place = S
+        for i in range(len(dp)):
+            if dp[N-i][place] == False:
+                place = place - A[N-i]
+                ans.append(N-i+1)
+        ans.reverse()
+        print(len(ans))
+        print(*ans)
     else:
-        print("No")
+        print(-1)
