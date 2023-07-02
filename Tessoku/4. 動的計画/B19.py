@@ -1,19 +1,21 @@
+import copy
 # input
 N, S = map(int, input().split())
 W, V = zip(*[map(int, input().split()) for _ in range(N)])
 
 if __name__ == "__main__":
     ## 動的計画法
-    dp = [[-1]*(S+1) for _ in range(N+1)]
-    dp[0][0] = 0
-    Js = [0]
+    dp = {'0':0}
+    next_dp = {'0':0}
     for i in range(N):
-        tmp_Js = []
-        for j in Js:
-            dp[i+1][j] = max(dp[i+1][j], dp[i][j])
+        for j in dp:
+            j = int(j)
             if j + W[i] <= S:
-                dp[i+1][j+W[i]] = max(dp[i+1][j+W[i]], dp[i][j] + V[i])
-                tmp_Js.append(j+W[i])
-        Js.extend(tmp_Js)
+                if str(j + W[i]) in next_dp:
+                    next_dp[str(j+W[i])] = max(next_dp[str(j+W[i])], dp[str(j)] + V[i])
+                else:
+                    next_dp[str(j+W[i])] = dp[str(j)] + V[i]
+
+        dp = copy.deepcopy(next_dp)
     
-    print(max(dp[-1]))
+    print(max(dp.values()))
