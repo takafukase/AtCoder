@@ -1,21 +1,21 @@
 import copy
+import numpy as np
 # input
 N, S = map(int, input().split())
 W, V = zip(*[map(int, input().split()) for _ in range(N)])
 
 if __name__ == "__main__":
     ## 動的計画法
-    dp = {'0':0}
-    next_dp = {'0':0}
-    for i in range(N):
-        for j in dp:
-            j = int(j)
-            if j + W[i] <= S:
-                if str(j + W[i]) in next_dp:
-                    next_dp[str(j+W[i])] = max(next_dp[str(j+W[i])], dp[str(j)] + V[i])
-                else:
-                    next_dp[str(j+W[i])] = dp[str(j)] + V[i]
+    max_value = N*1000
+    dp = [[10**10]*(max_value+1) for _ in range(N+1)]
+    dp[0][0] = 0
 
-        dp = copy.deepcopy(next_dp)
+    for i in range(N):
+        for j in range(max_value+1):
+            if dp[i][j] < 10**10:
+                dp[i+1][j] = min(dp[i+1][j], dp[i][j])
+                if dp[i][j] + W[i] <= S:
+                    dp[i+1][j+V[i]] = min(dp[i+1][j+V[i]], dp[i][j] + W[i])
     
-    print(max(dp.values()))
+    ans = [index for index in range(len(dp[-1])) if dp[-1][index] < 10**10]
+    print(ans[-1])
